@@ -1,0 +1,119 @@
+import random
+import os
+cards = [11, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10]
+
+computer_card = []
+user_card = []
+computer_total = 0 
+user_total = 0
+
+
+def computer_deal():
+    global computer_card
+    computer_card.append(cards[random.randint(0,len(cards)-1)])
+
+def user_deal():
+    global user_card
+    user_card.append(cards[random.randint(0,len(cards)-1)])
+
+def initial_card(): 
+  for _initial in range(1, 3): 
+    global user_card 
+    global computer_card 
+    user_card.append(cards[random.randint(0,len(cards)-1)]) 
+    computer_card.append(cards[random.randint(0,len(cards)-1)]) 
+
+def sum_cards(): 
+  global computer_total 
+  global user_total
+  user_total = 0
+  computer_total = 0
+  for total_c in computer_card:
+    computer_total += total_c 
+  for total_u in user_card:
+    user_total += total_u
+
+def reset_game():
+  global computer_total 
+  global user_total 
+  global computer_card 
+  global user_card 
+  computer_total = 0
+  user_total = 0
+  computer_card.clear()
+  user_card.clear()
+  
+
+continue_game = True
+while continue_game:  
+  initial_card() 
+  print(f"Your cards: {user_card} \nComputer's Card {computer_card[0]}\n ") 
+  choice = input("Would you like another card 'y' or 'n' \n ")
+  os.system('clear')
+  
+  no_bust = True 
+  if choice == 'y':
+    
+    while no_bust:
+      user_deal()
+      sum_cards()
+      print(f"Card added to your deck: {user_card}")
+      print(f"Computers card: {computer_card[0]} and your total: {user_total}\n ")
+      
+      if user_total > 21:
+        print(f"Computer's total: {computer_total}   your total: {user_total}")
+        print("Bust, you loss!")
+        no_bust = False 
+      elif computer_total == user_total:
+        print("push, tied! ")
+        no_bust = False
+      else: 
+        choice = input("Would you like another card 'n' or 'y'")
+        os.system('clear')
+        if choice == 'y': 
+          no_bust = True
+        if choice == 'n': 
+          if computer_total == user_total:
+            print("push, tied! ")
+          no_bust = False
+  
+  
+  if choice == 'n': 
+    if computer_total >= 17 and computer_total < 21: 
+      if computer_total > user_total: 
+        print(f"Computer Won!, Computer's total: {computer_total} and your total: {user_total}")
+      else:
+        print(f"Computer's total: {computer_total}   your total: {user_total}")
+        print("You Win!")
+    under_17 = True
+    while under_17: 
+      if computer_total < 17: 
+        computer_deal() 
+        sum_cards() 
+        print(f"Cards added to computers deck: {computer_card}:Computer's total: {computer_total}")
+        if computer_total == user_total:
+          print("push, tied! ")
+          under_17 = False
+        elif computer_total > 21:
+          print("Computer has bust, You won!")
+          under_17 = False
+        elif computer_total >= 17 and computer_total <= 21:
+          if computer_total > user_total:
+            print(f"Computer's total: {computer_total}   your total: {user_total}")
+            print("You lose!")
+            under_17 = False
+          if computer_total < user_total:
+            print(f"Computer's total: {computer_total}   your total: {user_total}")
+            print("You win!")
+            under_17 = False
+        else:
+          under_17 = True
+  
+  continue_choice = input("Would you like to play another game, 'y' or 'n'")
+  if continue_choice == 'n':
+    print("Thank you for playing Black Jack, have a good day!")
+    continue_game = False
+  if continue_choice == 'y':
+    reset_game()
+    os.system('clear')
+    continue_game is True
